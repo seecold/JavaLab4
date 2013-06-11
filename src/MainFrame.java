@@ -1,14 +1,17 @@
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.Enumeration;
 
 
-public class MainFrame extends javax.swing.JFrame 
+public class MainFrame extends JFrame
 {
     public MainFrame(String name) 
     {
         super(name);        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(700, 350));
+        setPreferredSize(new Dimension(500, 500));
         setMinimumSize(getPreferredSize());
         
         initComponents();
@@ -22,53 +25,63 @@ public class MainFrame extends javax.swing.JFrame
         controlPanel.setLayout(new GridLayout(3, 3));       
         this.add(controlPanel);
         
-        JSpinner RSpinner = new JSpinner();
+        final JSpinner RSpinner = new JSpinner();
         
         Integer[] xValues = {-5,-4,-3,-2,-1,0,1,2,3,4,5};
-        JComboBox xComboBox = new JComboBox(xValues);
+        final JComboBox xComboBox = new JComboBox(xValues);
         
-        ButtonGroup yCheckBoxGroup = new ButtonGroup();
+        final ButtonGroup yCheckBoxGroup = new ButtonGroup();
         JPanel yCheckBoxPanel = new JPanel();
         for(Integer i=-5;i<=5;i++)
         {
             JCheckBox tempCheckBox = new JCheckBox("y="+i.toString());
+            tempCheckBox.setSelected(true);
+            tempCheckBox.setActionCommand(i.toString());
             yCheckBoxPanel.add(tempCheckBox);
             yCheckBoxGroup.add(tempCheckBox);        
         } 
         
+        final JTextField xyTextField = new JTextField();        
+        //xyTextField.setEditable(false);
+        
+        JButton refreshButton = new JButton("Refresh!");        
+        refreshButton.setActionCommand("refresh");
+        refreshButton.addActionListener(new ActionListener() 
+        {
+            public void actionPerformed(ActionEvent e) 
+            {
+                Integer X = (int)xComboBox.getSelectedItem();
+                String Y = yCheckBoxGroup.getSelection().getActionCommand();
+                Integer R = Integer.parseInt(RSpinner.getValue().toString());
+                
+                if((new Outline(R)).isMarkInside(new Mark(X,Integer.parseInt(Y)))!=1)                
+                xyTextField.setText(X.toString()+Y.toString()+R.toString());
+                else
+                xyTextField.setText("nope");    
+            }
+        });
+        
+        
+        
         controlPanel.add(xComboBox);
         controlPanel.add(yCheckBoxPanel);
-        controlPanel.add(RSpinner);        
+        controlPanel.add(RSpinner);
+        controlPanel.add(xyTextField);
+        controlPanel.add(refreshButton);
         
         getContentPane().add(new JSeparator());
         getContentPane().add(controlPanel);
         pack();
     }
-    
-}
+    public String getSelectedButtonText(ButtonGroup buttonGroup) {
+        for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) 
+        {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected()) {
+                return button.getText();
+            }
+        }
 
-
-class SevenCheckBoxPanel extends JPanel
-{
-    JCheckBox y1 = new JCheckBox("y1");
-    JCheckBox y2 = new JCheckBox("y2");
-    JCheckBox y3 = new JCheckBox("y3");
-    JCheckBox y4 = new JCheckBox("y4");
-    JCheckBox y5 = new JCheckBox("y5");
-    JCheckBox y6 = new JCheckBox("y6");
-    JCheckBox y7 = new JCheckBox("y7");
-    
-//    public SevenCheckBoxPanel()
-//    {
-//            JPanel yCheckBoxPanel = new JPanel();
-//            yCheckBoxPanel.setLayout(new GridLayout(5, 5));
-//            
-//            yCheckBoxPanel.add(y1);
-//            yCheckBoxPanel.add(y2);
-//            yCheckBoxPanel.add(y3);
-//            yCheckBoxPanel.add(y4);
-//            yCheckBoxPanel.add(y5);
-//            yCheckBoxPanel.add(y6);
-//            yCheckBoxPanel.add(y7);
-//    }
+        return null;
+    }
 }
