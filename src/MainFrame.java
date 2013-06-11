@@ -7,6 +7,7 @@ public class MainFrame extends javax.swing.JFrame
     {
         super(name);
         initComponents();
+        this.setPreferredSize(new Dimension(1000, 1000));
     }
                         
     private void initComponents() {
@@ -14,20 +15,16 @@ public class MainFrame extends javax.swing.JFrame
         
         GridLayout mainLayout = new GridLayout(1, 2);
         GridLayout controlLayout = new GridLayout(3, 3);
-        
-        JPanel mainPanel = new JPanel();
         JPanel controlPanel = new JPanel();
         
-        mainPanel.setLayout(mainLayout);
+        this.setLayout(mainLayout);
         controlPanel.setLayout(controlLayout);  
         
-        mainPanel.add(controlPanel);
+        this.add(controlPanel);
         
         jSpinner1 = new javax.swing.JSpinner();
         controlPanel.add(jSpinner1);
         
-        
-        getContentPane().add(mainPanel);
         getContentPane().add(new JSeparator());
         getContentPane().add(controlPanel);
         pack();
