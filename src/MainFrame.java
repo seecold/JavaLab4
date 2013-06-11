@@ -10,7 +10,7 @@ public class MainFrame extends javax.swing.JFrame
         
         jSpinner1 = new javax.swing.JSpinner();       
 
-        javax.swing.GridLayout layout = new javax.swing.GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
