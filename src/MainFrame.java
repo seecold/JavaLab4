@@ -11,18 +11,23 @@ public class MainFrame extends JFrame
     {
         super(name);        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(500, 500));
+        setPreferredSize(new Dimension(1000, 250));
         setMinimumSize(getPreferredSize());
+        setResizable(false);
         
         initComponents();
     }
                         
     private void initComponents() 
     {
-        this.setLayout(new GridLayout(1, 2));
+        setLayout(new GridLayout(1, 3));
+        Outline figure = new Outline(1);
+        figure.setBackground(Color.GREEN);
+        add(figure);     
+        
         
         JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new GridLayout(3, 3));       
+        controlPanel.setLayout(new GridLayout(3, 3, 5, 5));       
         this.add(controlPanel);
         
         final JSpinner RSpinner = new JSpinner();
@@ -63,14 +68,12 @@ public class MainFrame extends JFrame
         
         
         
-        controlPanel.add(xComboBox);
-        controlPanel.add(yCheckBoxPanel);
+        add(xComboBox);
+        add(yCheckBoxPanel);
         controlPanel.add(RSpinner);
         controlPanel.add(xyTextField);
-        controlPanel.add(refreshButton);
-        
-        getContentPane().add(new JSeparator());
-        getContentPane().add(controlPanel);
+        controlPanel.add(refreshButton);      
+        add(controlPanel);
         pack();
     }
     public String getSelectedButtonText(ButtonGroup buttonGroup) {
