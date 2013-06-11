@@ -11,7 +11,7 @@ public class MainFrame extends JFrame
     {
         super(name);        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(1000, 250));
+        setPreferredSize(new Dimension(600, 300));
         setMinimumSize(getPreferredSize());
         setResizable(false);
         
@@ -27,28 +27,43 @@ public class MainFrame extends JFrame
         
         
         JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new GridLayout(3, 3, 5, 5));       
+        controlPanel.setLayout(new GridLayout(5,1));       
         this.add(controlPanel);
         
+        //R spinner
         final JSpinner RSpinner = new JSpinner();
+        JPanel rPanel = new JPanel();
+        rPanel.add(new JLabel("Choose R"));
+        RSpinner.setPreferredSize(new Dimension(50, 20));
+        rPanel.add(RSpinner);
         
-        Integer[] xValues = {-5,-4,-3,-2,-1,0,1,2,3,4,5};
+        //X combo
+        Integer[] xValues = {-2,-1,0,1,2};
         final JComboBox xComboBox = new JComboBox(xValues);
+        JPanel xPanel = new JPanel();
+        xPanel.add(new JLabel("Choose X"));
+        xPanel.add(xComboBox);
         
+        //Y checkbox
         final ButtonGroup yCheckBoxGroup = new ButtonGroup();
         JPanel yCheckBoxPanel = new JPanel();
-        for(Integer i=-5;i<=5;i++)
+        for(Integer i=-2;i<=2;i++)
         {
-            JCheckBox tempCheckBox = new JCheckBox("y="+i.toString());
+            JCheckBox tempCheckBox = new JCheckBox(i.toString());
             tempCheckBox.setSelected(true);
             tempCheckBox.setActionCommand(i.toString());
             yCheckBoxPanel.add(tempCheckBox);
             yCheckBoxGroup.add(tempCheckBox);        
-        } 
+        }
+        JPanel yPanel = new JPanel();
+        yPanel.add(new JLabel("Choose Y"));
+        yPanel.add(yCheckBoxPanel);
         
-        final JTextField xyTextField = new JTextField();        
-        //xyTextField.setEditable(false);
+        //result panel
+        final JTextField xyTextField = new JTextField();
         
+        
+        //refresh button
         JButton refreshButton = new JButton("Refresh!");        
         refreshButton.setActionCommand("refresh");
         refreshButton.addActionListener(new ActionListener() 
@@ -60,31 +75,20 @@ public class MainFrame extends JFrame
                 Integer R = Integer.parseInt(RSpinner.getValue().toString());
                 
                 if((new Outline(R)).isMarkInside(new Mark(X,Integer.parseInt(Y)))!=1)                
-                xyTextField.setText(X.toString()+Y.toString()+R.toString());
+                xyTextField.setText("X="+X.toString()+" Y="+Y.toString()+" R="+R.toString());
                 else
                 xyTextField.setText("nope");    
             }
         });
         
         
-        
-        add(xComboBox);
-        add(yCheckBoxPanel);
-        controlPanel.add(RSpinner);
+        //stacking
+        controlPanel.add(xPanel);
+        controlPanel.add(yPanel);
+        controlPanel.add(rPanel);
         controlPanel.add(xyTextField);
         controlPanel.add(refreshButton);      
         add(controlPanel);
         pack();
-    }
-    public String getSelectedButtonText(ButtonGroup buttonGroup) {
-        for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) 
-        {
-            AbstractButton button = buttons.nextElement();
-            if (button.isSelected()) {
-                return button.getText();
-            }
-        }
-
-        return null;
     }
 }
