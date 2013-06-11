@@ -9,7 +9,8 @@ public class Lab4
         SwingUtilities.invokeLater(new Runnable() 
         {
                 public void run() {
-                    new MainFrame().setVisible(true);
+                    MainFrame mainFrame = new MainFrame();
+                    mainFrame.setVisible(true);
                 }
             }
         );
