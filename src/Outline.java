@@ -9,7 +9,7 @@ public class Outline extends JPanel
     private int R;
     private int centerX, centerY;
     private float pixelsPerUnit;
-    private Mark lastClickedMark;
+    public Mark lastClickedMark;
     private boolean isLastClickedMarkInside;
     private int animationStep = 10;
     private Thread animationThread;
@@ -94,7 +94,7 @@ public class Outline extends JPanel
         isLastClickedMarkInside = isMarkInside(lastClickedMark) == 1;
         updateMeasurements();
     }
-    
+//    
     public void updateMeasurements()
     {
         Dimension size = getSize();
@@ -109,19 +109,19 @@ public class Outline extends JPanel
         float X = Math.round(mark.getX() * 10000) / 10000.0f;
         float Y = Math.round(mark.getY() * 10000) / 10000.0f;
         
-        if (Y >= 0.0)
+        if (Y >= 0)
         {
-            if (X >= 0.0) // first quarter
-                return ((X - R <= 0.0) && (Y - R <= 0.0)) ? 1 : 0;
-            else // second quarter
-                return (Y - (X + R)/2 <= 0.0) ? 1 : 0;
+                if (X >= 0) // first quarter
+                        return 0;
+                else // second quarter
+                        return ((X*X + Y*Y) <= (R/2)*(R/2)) ? 1 : 0;
         }
         else
         {
-            if (X < 0.0) // third quarter
-                return 0;
-            else // fourth quarter
-                return ((X*X + Y*Y) - R*R/4.0 <= 0.0) ? 1 : 0;
+                if (X <= 0) // third quarter
+                        return ((X >= -R/2) && (Y >= -R)) ? 1 : 0;
+                else // fourth quarter
+                        return ((R - X/R) / 2 >= Y) ? 1 : 0;
         }
     }
     
@@ -162,13 +162,12 @@ public class Outline extends JPanel
         
         float rToPixelsFloat = R * pixelsPerUnit;
         int rToPixels = Math.round(rToPixelsFloat);
-        int halfRToPixels = Math.round(rToPixelsFloat/2);
         
-        g.fillRect(centerX, centerY - rToPixels, rToPixels, rToPixels);
-        g.fillArc(centerX - halfRToPixels, centerY - halfRToPixels, 
-            rToPixels, rToPixels, 270, 90);
-        g.fillPolygon(new int[]{centerX - rToPixels, centerX, centerX}, 
-            new int[]{centerY, centerY, centerY - halfRToPixels}, 3);
+        g.fillRect(centerX - rToPixels/2, centerY , rToPixels/2, rToPixels);
+        g.fillArc(centerX - rToPixels/2 , centerY - rToPixels/2, 
+            rToPixels, rToPixels, 90, 90);
+        g.fillPolygon(new int[]{centerX + rToPixels, centerX, centerX}, 
+            new int[]{centerY, centerY + rToPixels, centerY}, 3);
         
         g.setColor(Color.blue);
         g.drawLine(centerX, 0, centerX, centerY * 2);

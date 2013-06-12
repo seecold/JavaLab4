@@ -20,9 +20,10 @@ public class MainFrame extends JFrame
                         
     private void initComponents() 
     {
-        setLayout(new GridLayout(1, 3));
-        Outline figure = new Outline(1);
-        figure.setBackground(Color.GREEN);
+        setLayout(new GridLayout(1, 2));
+        
+        final Outline figure = new Outline(1);
+        figure.setBackground(Color.green);
         add(figure);     
         
         
@@ -35,6 +36,7 @@ public class MainFrame extends JFrame
         JPanel rPanel = new JPanel();
         rPanel.add(new JLabel("Choose R"));
         RSpinner.setPreferredSize(new Dimension(50, 20));
+        RSpinner.setValue(1);
         rPanel.add(RSpinner);
         
         //X combo
@@ -73,11 +75,12 @@ public class MainFrame extends JFrame
                 Integer X = (int)xComboBox.getSelectedItem();
                 String Y = yCheckBoxGroup.getSelection().getActionCommand();
                 Integer R = Integer.parseInt(RSpinner.getValue().toString());
-                
-                if((new Outline(R)).isMarkInside(new Mark(X,Integer.parseInt(Y)))!=1)                
-                xyTextField.setText("X="+X.toString()+" Y="+Y.toString()+" R="+R.toString());
-                else
-                xyTextField.setText("nope");    
+                figure.changeR(R);
+                Integer tempy = (int)figure.lastClickedMark.getX();
+                Integer tempx = (int)figure.lastClickedMark.getY();
+                xyTextField.setText("X="+tempx.toString()+" Y="+tempy.toString()+" R="+R.toString());
+                if(figure.isMarkInside(figure.lastClickedMark)!=1)
+                xyTextField.setText("X="+tempx.toString()+" Y="+tempy.toString()+" R="+R.toString()+"nope");    
             }
         });
         
