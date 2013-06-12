@@ -65,11 +65,11 @@ public class Outline extends JPanel
         else { // animation here
             animationThread = new Thread(new Runnable() {
                 public void run() {
-                    for (int i = 1; i < 10; i++) {
+                    for (int i = 0; i <= 10; i++) {
                         try {
                             animationStep = i;
                             repaint();
-                            Thread.sleep(1000);
+                            Thread.sleep(100);
                             if (animationThread != Thread.currentThread())
                                 return;
                         }
@@ -180,7 +180,7 @@ public class Outline extends JPanel
                 g.setColor(new Color(1.0f, 0.0f, 0.0f, animationStep / 10.0f));
             
             Point point = markToPoint(lastClickedMark);
-            g.fillOval(point.x - 3, point.y - 3, 6, 6);
+            g.fillOval(point.x - 3, point.y - 3, R/(21-animationStep), R/(21-animationStep));
         }
     }
 }
