@@ -9,6 +9,7 @@ public class MainFrame extends JFrame
 {
     //result panel must be public to be acsessed from figure
     final public JTextField xyTextField = new JTextField();
+    
     final Outline figure = new Outline(1);
     
     public MainFrame(String name) 
@@ -38,14 +39,15 @@ public class MainFrame extends JFrame
         JPanel rPanel = new JPanel();
         rPanel.add(new JLabel("Choose R"));
         RSpinner.setPreferredSize(new Dimension(50, 20));
-        RSpinner.setValue(110);
-        figure.changeR(110);
+        RSpinner.setValue(100);
+        figure.changeR(100);
         RSpinner.addChangeListener(new ChangeListener() 
         {
             public void stateChanged(ChangeEvent e) 
             {
                 Integer R = Integer.parseInt(RSpinner.getValue().toString());
-                figure.changeR((int)Math.ceil(Integer.parseInt(RSpinner.getValue().toString())));                   
+                if(R<=0){R=0;RSpinner.setValue(0);}
+                figure.changeR((int)Math.ceil(R));
             }
         });
         rPanel.add(RSpinner);
@@ -81,7 +83,7 @@ public class MainFrame extends JFrame
                 Float X = new Float((int)xComboBox.getSelectedItem());
                 Float Y = Float.parseFloat(yCheckBoxGroup.getSelection().getActionCommand());
                 Mark tempMark = new Mark(X ,Y);
-                showMarkInfo(tempMark, figure.getR());
+                showMarkInfo(tempMark);
                 figure.clickMark(tempMark);
             }
         });
@@ -95,12 +97,22 @@ public class MainFrame extends JFrame
         controlPanel.add(refreshButton);      
         add(controlPanel);
         refreshButton.doClick();
-        pack();        
+        pack();
+        figure.addMouseListener(new MouseListener() { 
+            public void mouseClicked(MouseEvent e) {
+                Mark mark = figure.pointToMark(new Point(e.getX(), e.getY()));
+                showMarkInfo(mark);
+            }
+            public void mouseExited(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {}
+        });
     }
     
-    public void showMarkInfo(Mark mark, int R)
+    public void showMarkInfo(Mark mark)
     {
-        xyTextField.setText("X="+mark.getX()+"\n"+" Y="+mark.getY()+" R="+R);
+        xyTextField.setText("Current mark is: "+mark.toString());
     }
 
 }
