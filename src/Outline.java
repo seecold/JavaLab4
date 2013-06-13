@@ -10,16 +10,18 @@ public class Outline extends JPanel
     private int centerX, centerY;
     private float pixelsPerUnit;
     private Mark lastClickedMark;
-    private int animationStep = 10;
+    private int animationStep = 0;
     private Thread animationThread;
     
     public Outline(int newR)
     {
-        try {
+        try 
+        {
             if (newR <= 0)
                 throw new IllegalArgumentException();
         }
-        catch (IllegalArgumentException e) {
+        catch (IllegalArgumentException e) 
+        {
             System.out.println("R <= 0 is invalid, changind to R = 1");
             newR = 1;
         }
@@ -55,24 +57,37 @@ public class Outline extends JPanel
     public void clickMark(Mark mark)
     {
         lastClickedMark = mark;
-        if (isMarkInside(getLastClickedMark())==1) {
+        if (isMarkInside(getLastClickedMark())==0) {
             animationThread = null;
-            animationStep = 10;
+            animationStep = 5;
             repaint();
         }
-        else { // animation here
-            animationThread = new Thread(new Runnable() {
-                public void run() {
-                    for (int i = 0; i <= 10; i++) {
-                        try {
-                            animationStep = i;
+        else 
+        { // animation here
+            animationThread = new Thread(new Runnable() 
+            {
+                boolean reverseFlag = false;
+                public void run() 
+                {
+                    for(;;) 
+                    {
+                        try 
+                        {
+                            if(!reverseFlag)
+                                animationStep++;
+                            else
+                                animationStep--;
+                            
                             repaint();
-                            Thread.sleep(100);
+                            if((animationStep==10)||(animationStep==0))
+                                reverseFlag=!reverseFlag;
+                            Thread.sleep(10);
                             if (animationThread != Thread.currentThread())
                                 return;
                         }
-                        catch (InterruptedException e) {
-                            animationStep = 10;
+                        catch (InterruptedException e) 
+                        {
+                            animationStep = 5;
                         }
                     }
                 }
@@ -170,15 +185,11 @@ public class Outline extends JPanel
         g.drawLine(centerX, 0, centerX, centerY * 2);
         g.drawLine(0, centerY, centerX * 2, centerY);
         
-        if (lastClickedMark != null) {
+        if (lastClickedMark != null) 
+        {
             Point point = markToPoint(lastClickedMark);
-            if (isMarkInside(getLastClickedMark())==1)
-                g.fillOval(point.x - R/(21-animationStep)/2, point.y - R/(21-animationStep)/2,
-                    R/(21-animationStep), R/(21-animationStep));
-            else
-                g.fillOval(point.x - R/(21-animationStep)/2, point.y - R/(21-animationStep)/2,
-                    R/(21-animationStep), R/(21-animationStep));
-            
+            g.fillOval(point.x - R/(21-animationStep)/2, point.y - R/(21-animationStep)/2,
+                R/(21-animationStep), R/(21-animationStep));            
         }
     }
 }

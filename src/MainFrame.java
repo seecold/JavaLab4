@@ -18,7 +18,6 @@ public class MainFrame extends JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(600, 300));
         setMinimumSize(getPreferredSize());
-        setResizable(false);
         
         initComponents();
     }
