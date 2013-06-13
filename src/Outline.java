@@ -9,7 +9,7 @@ public class Outline extends JPanel
     private int R;
     private int centerX, centerY;
     private float pixelsPerUnit;
-    public Mark lastClickedMark;
+    private Mark lastClickedMark;
     private boolean isLastClickedMarkInside;
     private int animationStep = 10;
     private Thread animationThread;
@@ -91,7 +91,7 @@ public class Outline extends JPanel
     public void changeR(int R)
     {
         this.R = R;
-        isLastClickedMarkInside = isMarkInside(lastClickedMark) == 1;
+        isLastClickedMarkInside = isMarkInside(getLastClickedMark()) == 1;
         updateMeasurements();
     }
 //    
@@ -106,8 +106,8 @@ public class Outline extends JPanel
     
     public int isMarkInside(Mark mark)
     {   
-        float X = Math.round(mark.getX() * 10000) / 10000.0f;
-        float Y = Math.round(mark.getY() * 10000) / 10000.0f;
+        float X = (float)Math.ceil(mark.getX());
+        float Y = (float)Math.ceil(mark.getY());
         
         if (Y >= 0)
         {
