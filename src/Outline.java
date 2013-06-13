@@ -10,7 +10,6 @@ public class Outline extends JPanel
     private int centerX, centerY;
     private float pixelsPerUnit;
     private Mark lastClickedMark;
-    private boolean isLastClickedMarkInside;
     private int animationStep = 10;
     private Thread animationThread;
     
@@ -56,8 +55,7 @@ public class Outline extends JPanel
     public void clickMark(Mark mark)
     {
         lastClickedMark = mark;
-        isLastClickedMarkInside = isMarkInside(lastClickedMark) == 1;
-        if (isLastClickedMarkInside) {
+        if (isMarkInside(getLastClickedMark())==1) {
             animationThread = null;
             animationStep = 10;
             repaint();
@@ -91,7 +89,6 @@ public class Outline extends JPanel
     public void changeR(int R)
     {
         this.R = R;
-        isLastClickedMarkInside = isMarkInside(getLastClickedMark()) == 1;
         updateMeasurements();
     }
 //    
@@ -121,7 +118,7 @@ public class Outline extends JPanel
                 if (X <= 0) // third quarter
                         return ((X >= -R/2) && (Y >= -R)) ? 1 : 0;
                 else // fourth quarter
-                        return ((R - X/R) / 2 >= Y) ? 1 : 0;
+                        return (X-Y<(R)) ? 1 : 0;
         }
     }
     
@@ -174,13 +171,14 @@ public class Outline extends JPanel
         g.drawLine(0, centerY, centerX * 2, centerY);
         
         if (lastClickedMark != null) {
-            if (isLastClickedMarkInside)
-                g.setColor(new Color(0.0f, 1.0f, 0.0f, animationStep / 10.0f));
-            else
-                g.setColor(new Color(1.0f, 0.0f, 0.0f, animationStep / 10.0f));
-            
             Point point = markToPoint(lastClickedMark);
-            g.fillOval(point.x - 3, point.y - 3, R/(21-animationStep), R/(21-animationStep));
+            if (isMarkInside(getLastClickedMark())==1)
+                g.fillOval(point.x - R/(21-animationStep)/2, point.y - R/(21-animationStep)/2,
+                    R/(21-animationStep), R/(21-animationStep));
+            else
+                g.fillOval(point.x - R/(21-animationStep)/2, point.y - R/(21-animationStep)/2,
+                    R/(21-animationStep), R/(21-animationStep));
+            
         }
     }
 }

@@ -7,9 +7,9 @@ import java.util.Enumeration;
 
 public class MainFrame extends JFrame
 {
-    //result panel must be public to be acsessed from figure
-    final public JTextField xyTextField = new JTextField();
     
+    //result panel
+    final JTextField xyTextField = new JTextField();
     final Outline figure = new Outline(1);
     
     public MainFrame(String name) 
@@ -32,31 +32,30 @@ public class MainFrame extends JFrame
         
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(new GridLayout(5,1));       
-        this.add(controlPanel);
+        add(controlPanel);
         
         //R spinner
-        final JSpinner RSpinner = new JSpinner();
+        final JSpinner rSpinner = new JSpinner();
         JPanel rPanel = new JPanel();
         rPanel.add(new JLabel("Choose R"));
-        RSpinner.setPreferredSize(new Dimension(50, 20));
-        RSpinner.setValue(100);
+        rSpinner.setValue(100);
         figure.changeR(100);
-        RSpinner.addChangeListener(new ChangeListener() 
+        rSpinner.addChangeListener(new ChangeListener() 
         {
             public void stateChanged(ChangeEvent e) 
             {
-                Integer R = Integer.parseInt(RSpinner.getValue().toString());
-                if(R<=0){R=0;RSpinner.setValue(0);}
+                Integer R = Integer.parseInt(rSpinner.getValue().toString());
+                if(R<=0){R=0;rSpinner.setValue(0);}
                 figure.changeR((int)Math.ceil(R));
             }
         });
-        rPanel.add(RSpinner);
+        rPanel.add(rSpinner);
         
         //X combo
         Integer[] xValues = {-75,-50,-25,0,25,50,75};
         final JComboBox xComboBox = new JComboBox(xValues);
         JPanel xPanel = new JPanel();
-        xPanel.add(new JLabel("Choose X"));
+        xPanel.add(new JLabel("Choose X:"));
         xPanel.add(xComboBox);
         
         //Y checkbox
@@ -71,7 +70,7 @@ public class MainFrame extends JFrame
             yCheckBoxGroup.add(tempCheckBox);        
         }
         JPanel yPanel = new JPanel();
-        yPanel.add(new JLabel("Choose Y"));
+        yPanel.add(new JLabel("Choose Y:"));
         yPanel.add(yCheckBoxPanel);   
         
         //refresh button
@@ -87,7 +86,6 @@ public class MainFrame extends JFrame
                 figure.clickMark(tempMark);
             }
         });
-        
         
         //stacking
         controlPanel.add(xPanel);
