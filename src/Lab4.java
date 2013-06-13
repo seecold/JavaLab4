@@ -1,7 +1,4 @@
 import javax.swing.*;
-import java.util.*;
-import java.io.*;
-
 public class Lab4 
 {        
     public static void main(String[] args) 
@@ -10,7 +7,8 @@ public class Lab4
         {
             UIManager.setLookAndFeel 
             (UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {}
+        } 
+        catch (ClassNotFoundException e) {}
         catch (InstantiationException e) {}
         catch (IllegalAccessException e) {}
         catch (UnsupportedLookAndFeelException e) {}
@@ -18,7 +16,7 @@ public class Lab4
         {
             public void run() 
             {
-                MainFrame mainFrame = new MainFrame("Lab4");
+                MainFrame mainFrame = new MainFrame();
                 mainFrame.setVisible(true);
             }
         });

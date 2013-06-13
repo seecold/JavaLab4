@@ -40,7 +40,7 @@ public class Outline extends JPanel
         
         addMouseListener(new MouseListener() { 
           public void mouseClicked(MouseEvent e) { 
-            clickMark(pointToMark(new Point(e.getX(), e.getY())));
+            placeMark(pointToMark(new Point(e.getX(), e.getY())));
           }
           public void mouseExited(MouseEvent e) {}
           public void mouseEntered(MouseEvent e) {}
@@ -54,7 +54,7 @@ public class Outline extends JPanel
         return (lastClickedMark != null) ? lastClickedMark : new Mark(0, 0);
     }
     
-    public void clickMark(Mark mark)
+    public void placeMark(Mark mark)
     {
         lastClickedMark = mark;
         if (isMarkInside(getLastClickedMark())==0) {
@@ -66,9 +66,10 @@ public class Outline extends JPanel
         { // animation here
             animationThread = new Thread(new Runnable() 
             {
-                boolean reverseFlag = false;
+                
                 public void run() 
                 {
+                    boolean reverseFlag = false;
                     for(;;) 
                     {
                         try 
@@ -106,7 +107,7 @@ public class Outline extends JPanel
         this.R = R;
         updateMeasurements();
     }
-//    
+    
     public void updateMeasurements()
     {
         Dimension size = getSize();
@@ -185,6 +186,7 @@ public class Outline extends JPanel
         g.drawLine(centerX, 0, centerX, centerY * 2);
         g.drawLine(0, centerY, centerX * 2, centerY);
         
+        g.setColor(Color.red);
         if (lastClickedMark != null) 
         {
             Point point = markToPoint(lastClickedMark);

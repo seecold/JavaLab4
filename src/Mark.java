@@ -1,4 +1,4 @@
-public class Mark implements Comparable<Mark>
+public class Mark
 {
 	private float X;
 	private float Y;
@@ -16,10 +16,4 @@ public class Mark implements Comparable<Mark>
 	{
 		return String.format("(%.2f;%.2f)", X, Y);
 	}
-        
-        @Override
-        public int compareTo(Mark anotherMark) 
-        {
-            return 0;
-        }
 }

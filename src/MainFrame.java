@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Enumeration;
 
 
 public class MainFrame extends JFrame
@@ -10,23 +9,20 @@ public class MainFrame extends JFrame
     
     //result panel
     final JTextField xyTextField = new JTextField();
-    final Outline figure = new Outline(1);
     
-    public MainFrame(String name) 
-    {
-        super(name);        
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(600, 300));
-        setMinimumSize(getPreferredSize());
-        
+    final Outline newOutline = new Outline(1);
+    
+    public MainFrame() 
+    {        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
         initComponents();
     }
                         
     private void initComponents() 
     {
         setLayout(new GridLayout(1, 2));      
-        figure.setBackground(Color.green);
-        add(figure);     
+        newOutline.setBackground(Color.green);
+        add(newOutline);     
         
         
         JPanel controlPanel = new JPanel();
@@ -38,14 +34,14 @@ public class MainFrame extends JFrame
         JPanel rPanel = new JPanel();
         rPanel.add(new JLabel("Choose R"));
         rSpinner.setValue(100);
-        figure.changeR(100);
+        newOutline.changeR(100);
         rSpinner.addChangeListener(new ChangeListener() 
         {
             public void stateChanged(ChangeEvent e) 
             {
                 Integer R = Integer.parseInt(rSpinner.getValue().toString());
                 if(R<=0){R=0;rSpinner.setValue(0);}
-                figure.changeR((int)Math.ceil(R));
+                newOutline.changeR((int)Math.ceil(R));
             }
         });
         rPanel.add(rSpinner);
@@ -82,7 +78,7 @@ public class MainFrame extends JFrame
                 Float Y = Float.parseFloat(yCheckBoxGroup.getSelection().getActionCommand());
                 Mark tempMark = new Mark(X ,Y);
                 showMarkInfo(tempMark);
-                figure.clickMark(tempMark);
+                newOutline.placeMark(tempMark);
             }
         });
         
@@ -95,9 +91,10 @@ public class MainFrame extends JFrame
         add(controlPanel);
         refreshButton.doClick();
         pack();
-        figure.addMouseListener(new MouseListener() { 
+        
+        newOutline.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
-                Mark mark = figure.pointToMark(new Point(e.getX(), e.getY()));
+                Mark mark = newOutline.pointToMark(new Point(e.getX(), e.getY()));
                 showMarkInfo(mark);
             }
             public void mouseExited(MouseEvent e) {}
