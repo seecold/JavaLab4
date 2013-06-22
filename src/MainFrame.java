@@ -74,7 +74,7 @@ public class MainFrame extends JFrame
         {
             public void actionPerformed(ActionEvent e) 
             {
-                Float X = new Float((int)xComboBox.getSelectedItem());
+                Float X = new Float((Integer)xComboBox.getSelectedItem());
                 Float Y = Float.parseFloat(yCheckBoxGroup.getSelection().getActionCommand());
                 Mark tempMark = new Mark(X ,Y);
                 showMarkInfo(tempMark);

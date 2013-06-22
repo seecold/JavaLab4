@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.net.*;
 
 public class Outline extends JPanel
 {
@@ -118,8 +120,24 @@ public class Outline extends JPanel
     }
     
     public int isMarkInside(Mark mark)
-    {   
-        float X = (float)Math.ceil(mark.getX());
+    {
+        String recieved = null;
+        try
+        {   
+            Socket clientSocket = new Socket("localhost", 6789);   
+            DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());   
+            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));   
+            
+            outToServer.writeBytes(mark.toString()+((Integer)R).toString());   
+            recieved = inFromServer.readLine();
+            clientSocket.close();
+            
+        }
+        catch(IOException e)
+        {            
+        }
+        return Integer.parseInt(recieved);        
+        /*float X = (float)Math.ceil(mark.getX());
         float Y = (float)Math.ceil(mark.getY());
         
         if (Y >= 0)
@@ -135,7 +153,7 @@ public class Outline extends JPanel
                         return ((X >= -R/2) && (Y >= -R)) ? 1 : 0;
                 else // fourth quarter
                         return (X-Y<(R)) ? 1 : 0;
-        }
+        }*/
     }
     
     public float pixelsToUnits(int pixels, PanelAxis axis)

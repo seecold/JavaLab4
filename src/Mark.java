@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Mark
 {
 	private float X;
