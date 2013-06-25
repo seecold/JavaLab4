@@ -14,6 +14,7 @@ public class Outline extends JPanel
     private Mark lastClickedMark;
     private int animationStep = 0;
     private Thread animationThread;
+    private static Integer isLastMarkInside = 0;
     
     public Outline(int newR)
     {
@@ -58,17 +59,18 @@ public class Outline extends JPanel
     
     public void placeMark(Mark mark)
     {
+        isLastMarkInside = isMarkInside(mark);
         lastClickedMark = mark;
-        if (isMarkInside(getLastClickedMark())==0) {
+        if (isLastMarkInside==null)
+        {
             animationThread = null;
             animationStep = 5;
             repaint();
         }
-        else 
+        else if (isLastMarkInside==1)
         { // animation here
             animationThread = new Thread(new Runnable() 
-            {
-                
+            {                
                 public void run() 
                 {
                     boolean reverseFlag = false;
@@ -97,6 +99,12 @@ public class Outline extends JPanel
             });
             animationThread.start();
         }
+        else if (isLastMarkInside== 0)
+        {
+            animationThread = null;
+            animationStep = 5;
+            repaint();
+        }
     }
     
     public int getR()
@@ -119,41 +127,31 @@ public class Outline extends JPanel
         repaint();
     }
     
-    public int isMarkInside(Mark mark)
+    public Integer isMarkInside(Mark mark)
     {
-        String recieved = null;
+        
+        int recieved;
         try
         {   
-            Socket clientSocket = new Socket("localhost", 6789);   
-            DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());   
-            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));   
+            Socket clientSocket = new Socket("127.0.0.1",6789);
+            DataOutputStream outToServer = 
+                    new DataOutputStream(clientSocket.getOutputStream());
+            DataInputStream inFromServer = 
+                    new DataInputStream(clientSocket.getInputStream());
             
-            outToServer.writeBytes(mark.toString()+((Integer)R).toString());   
-            recieved = inFromServer.readLine();
-            clientSocket.close();
+            outToServer.writeFloat(mark.getX());
+            outToServer.writeFloat(mark.getY());
+            outToServer.writeInt(R);
             
+            recieved = inFromServer.readInt();
+            
+            clientSocket.close();            
         }
         catch(IOException e)
-        {            
-        }
-        return Integer.parseInt(recieved);        
-        /*float X = (float)Math.ceil(mark.getX());
-        float Y = (float)Math.ceil(mark.getY());
-        
-        if (Y >= 0)
         {
-                if (X >= 0) // first quarter
-                        return 0;
-                else // second quarter
-                        return ((X*X + Y*Y) <= (R/2)*(R/2)) ? 1 : 0;
+            return null;
         }
-        else
-        {
-                if (X <= 0) // third quarter
-                        return ((X >= -R/2) && (Y >= -R)) ? 1 : 0;
-                else // fourth quarter
-                        return (X-Y<(R)) ? 1 : 0;
-        }*/
+        return recieved;       
     }
     
     public float pixelsToUnits(int pixels, PanelAxis axis)
@@ -205,6 +203,8 @@ public class Outline extends JPanel
         g.drawLine(0, centerY, centerX * 2, centerY);
         
         g.setColor(Color.red);
+        if (isLastMarkInside==null)
+            g.setColor(Color.gray);
         if (lastClickedMark != null) 
         {
             Point point = markToPoint(lastClickedMark);
